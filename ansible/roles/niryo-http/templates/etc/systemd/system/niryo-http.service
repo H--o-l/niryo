@@ -1,0 +1,13 @@
+[Unit]
+Description=niryo-http
+After=network.target
+
+[Service]
+User=niryo
+Group=niryo
+WorkingDirectory=/home/niryo/niryo-http
+Environment="PATH=/usr/bin"
+ExecStart=/home/niryo/.local/bin/niryo-http
+
+[Install]
+WantedBy=multi-user.target

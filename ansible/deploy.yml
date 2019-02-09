@@ -1,0 +1,5 @@
+---
+
+- hosts: niryo
+  roles:
+    - niryo-http

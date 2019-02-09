@@ -1,0 +1,11 @@
+---
+
+- name: Reload systemd files
+  command: systemctl daemon-reload
+  become: true
+
+- name: Restart niryo-http
+  service:
+    name: niryo-http
+    state: restarted
+  become: true

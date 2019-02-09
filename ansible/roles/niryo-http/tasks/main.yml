@@ -1,0 +1,64 @@
+---
+
+# if issue with port access
+# https://askubuntu.com/a/224396
+
+- name: Update pi apt cache
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: Install system dependencies
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - python-setuptools
+  become: yes
+
+- name: Create niryo-http directory
+  file:
+    path: /home/niryo/niryo-http
+    state: directory
+    owner: niryo
+    mode: 0700
+
+- name: Sync niryo-http files
+  synchronize:
+    src: '~/iut/niryo/niryo-http/{{ item.src }}'
+    dest: '/home/niryo/niryo-http/{{ item.dest }}'
+    rsync_opts:
+      - "--exclude=*.pyc"
+    checksum: true # not needed but logic
+  with_items:
+    - {src: niryo_http/, dest: niryo_http} # src
+    - {src: setup.cfg, dest: setup.cfg}
+    - {src: setup.py, dest: setup.py}
+  register: src
+
+- name: Install niryo-http
+  command: python setup.py install --user
+  args:
+    chdir: /home/niryo/niryo-http
+  # when: src.changed
+  notify:
+    - Restart niryo-http
+
+- name: Create systemd service
+  template:
+    src: etc/systemd/system/niryo-http.service
+    dest: /etc/systemd/system/niryo-http.service
+  become: yes
+  tags: [conf]
+  notify:
+    - Reload systemd files
+    - Restart niryo-http
+
+- meta: flush_handlers
+
+- name: Enable and start niryo-http
+  service:
+    name: niryo-http
+    enabled: true
+    state: started
+  become: yes
