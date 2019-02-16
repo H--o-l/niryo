@@ -14,6 +14,7 @@
   vars:
     packages:
     - python-setuptools
+    - silversearcher-ag # just for dev
   become: yes
 
 - name: Create niryo-http directory
