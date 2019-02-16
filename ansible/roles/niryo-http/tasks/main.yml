@@ -3,10 +3,10 @@
 # if issue with port access
 # https://askubuntu.com/a/224396
 
-- name: Update pi apt cache
-  apt:
-    update_cache: yes
-  become: yes
+# - name: Update pi apt cache
+#   apt:
+#     update_cache: yes
+#   become: yes
 
 - name: Install system dependencies
   apt:
