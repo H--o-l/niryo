@@ -15,7 +15,7 @@ Using (dev)
 
 .. code:: shell
 
- python setup.py sdist
+ python niryo_hhtp
 
 
 

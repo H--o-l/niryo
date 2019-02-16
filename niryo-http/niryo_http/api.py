@@ -37,6 +37,11 @@ def start():
     app.run(host='0.0.0.0', port=6000, threaded=True)
 
 
+def start_with_auto_reload():
+    app.debug = True
+    app.run(host='0.0.0.0', port=6000, threaded=True)
+
+
 @app.route('/', methods=['GET'])
 def auth_demo_route():
     # data = flask.request.get_json(force=True)

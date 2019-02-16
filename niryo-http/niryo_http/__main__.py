@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
-from . import api
-
-
+import api
 
 if __name__ == '__main__':
-    api.start()
+    api.start_with_auto_reload()
