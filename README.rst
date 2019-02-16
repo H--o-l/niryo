@@ -21,6 +21,14 @@ Notes
 -----
 
 Add Python et pip to windows 10 path in powershell:
+
 .. code:: powershell
 
  $env:PATH = $env:PATH + ";C:\Users\H__o_l\AppData\Local\Programs\Python\Python37-32\;C:\Users\H__o_l\AppData\Local\Programs\Python\Python37-32\Scripts\"
+
+
+Mount niryo rpi folder with sshfs:
+
+.. code:: shell
+
+ sshfs niryo@<niryo-IP>:/home/niryo mount
