@@ -6,7 +6,18 @@ After=network.target
 User=niryo
 Group=niryo
 WorkingDirectory=/home/niryo/niryo-http
-Environment="PATH=/usr/bin"
+Environment="ROS_PACKAGE_PATH=/home/niryo/catkin_ws/src:/opt/ros/kinetic/share"
+Environment="ROS_ROOT=/opt/ros/kinetic/share/ros"
+Environment="ROS_MASTER_URI=http://localhost:11311"
+Environment="ROS_VERSION=1"
+Environment="LD_LIBRARY_PATH=/home/niryo/catkin_ws/devel/lib:/opt/ros/kinetic/lib:/opt/ros/kinetic/lib/arm-linux-gnueabihf"
+Environment="PATH=/home/niryo/bin:/home/niryo/.local/bin:/opt/ros/kinetic/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+Environment="ROS_DISTRO=kinetic"
+Environment="ROS_LANG_DISABLE=genlisp:geneus:gennodejs"
+Environment="PKG_CONFIG_PATH=/home/niryo/catkin_ws/devel/lib/pkgconfig:/opt/ros/kinetic/lib/pkgconfig:/opt/ros/kinetic/lib/arm-linux-gnueabihf/pkgconfig"
+Environment="ROS_ETC_DIR=/opt/ros/kinetic/etc/ros"
+Environment="PYTHONPATH=/home/niryo/catkin_ws/devel/lib/python2.7/dist-packages:/opt/ros/kinetic/lib/python2.7/dist-packages:/home/niryo/catkin_ws/src/niryo_one_python_api/src/niryo_python_api"
+Environment=PYTHONUNBUFFERED=true
 ExecStart=/home/niryo/.local/bin/niryo-http
 
 [Install]
