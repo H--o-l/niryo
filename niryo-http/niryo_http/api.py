@@ -7,13 +7,20 @@ import time
 import threading
 import urllib
 from jsonschema import validate, ValidationError
+import logging
+import signal
 
 # Niryo API
 from niryo_one_python_api.niryo_one_api import *
 import rospy
 
 app = flask.Flask(__name__)
+app.logger.setLevel(logging.INFO)
+
 niryo = None
+rospy_handler = None
+last_tool = TOOL_NONE
+supported_tools = ['3'] # Only grip 3 for now, otherwise /!\ Rospi deadlock
 
 class InvalidUsage(Exception):
     def __init__(self, code, message=None, body=None):
@@ -43,6 +50,22 @@ def internal_error(error):
 
     return response
 
+@app.after_request
+def after_request(response):
+    if response.status_code == 200:
+        app.logger.info('%s %s %s %s',
+                        flask.request.remote_addr,
+                        flask.request.method,
+                        flask.request.full_path,
+                        response.status)
+    else:
+        app.logger.info('%s %s %s %s - %s',
+                        flask.request.remote_addr,
+                        flask.request.method,
+                        flask.request.full_path,
+                        response.status,
+                        response.get_data())
+    return response
 
 class RospyHandler(threading.Thread):
     def __init__(self):
@@ -54,21 +77,30 @@ class RospyHandler(threading.Thread):
         niryo = NiryoOne()
         rospy.spin()
 
-def start():
-    # Not a good idea finally ! 2 process are started and conflict.
-    # app.debug = True
+def stop(*argv):
+    global rospy_handler
+    niryo.activate_learning_mode(True)
+    rospy.signal_shutdown('Server going down')
+    rospy_handler.join();
+    print '--- rospy closing ok ---'
+    raise RuntimeError('Server going down')
 
+def start():
+    global rospy_handler
     rospy_handler = RospyHandler()
+    signal.signal(signal.SIGINT, stop)
+    signal.signal(signal.SIGTERM, stop)
     rospy_handler.start()
     while not niryo:
         time.sleep(1)
     print '--- rospi init ok ---'
-    app.run(host='0.0.0.0', port=6000, threaded=False)
-    niryo.activate_learning_mode(True)
-    print '--- closing ! ---'
-    rospy.signal_shutdown('app is down')
-    rospy_handler.join()
-    print '--- rospi down ok ---'
+    try:
+        app.run(host='0.0.0.0', port=6000, threaded=False, debug=False, use_reloader=False)
+    except RuntimeError, msg:
+        if str(msg) == "Server going down":
+            print '--- app closing ok ---'
+        else:
+            raise RuntimeError(msg)
 
 def list_routes():
     routes = {}
@@ -152,9 +184,13 @@ def post_joints():
     try:
         validate(data, schema)
     except ValidationError as e:
+        raise InvalidUsage(400, e.message)
+
+    try:
+        niryo.move_joints(data)
+    except NiryoOneException as e:
         raise InvalidUsage(400, str(e))
 
-    niryo.move_joints(data)
     return 'OK'
 
 # curl 192.168.0.21:6000/joints/0 -d '-0.1'
@@ -167,8 +203,69 @@ def post_joint(n):
     try:
         validate(data, schema)
     except ValidationError as e:
-        raise InvalidUsage(400, str(e))
+        raise InvalidUsage(400, e.message)
     joints = niryo.joints
     joints[int(n)] = data
-    niryo.move_joints(joints)
+
+    try:
+        niryo.move_joints(joints)
+    except NiryoOneException as e:
+        raise InvalidUsage(400, str(e))
+
+    return 'OK'
+
+@app.route('/gripper/unset', methods=['POST'])
+def unset_gripper():
+    niryo.change_tool(0)
+    print 'Tool unset'
+    return 'OK'
+
+# curl -X POST 192.168.0.21:6000/gripper/3/open
+@app.route('/gripper/<n>/open', methods=['POST'])
+def open_gripper(n):
+    global last_tool
+    if n not in supported_tools:
+        raise InvalidUsage(400, 'Unsupported tool: ' + n + '\n'
+                                'Supported tools are: ' + str(supported_tools))
+    if n == '1':
+        tool = TOOL_GRIPPER_1_ID
+    elif n == '2':
+        tool = TOOL_GRIPPER_2_ID
+    elif n == '3':
+        tool = TOOL_GRIPPER_3_ID
+    else:
+        raise InvalidUsage(400, 'Should not be here, tool not supported: ' + n)
+    if tool != last_tool:
+        last_tool = tool
+        niryo.change_tool(tool)
+        app.logger.info('Tool changed for ' + n)
+    learning_before = niryo.learning_mode_on
+    niryo.open_gripper(tool, 300)
+    if learning_before == True:
+        niryo.activate_learning_mode(True)
+    return 'OK'
+
+# curl -X POST 192.168.0.21:6000/gripper/3/close
+@app.route('/gripper/<n>/close', methods=['POST'])
+def close_gripper(n):
+    global last_tool
+    if n not in supported_tools:
+        raise InvalidUsage(400, 'Unsupported tool: ' + n + '\n'
+                                'Supported tools are: ' + str(supported_tools))
+    if n == '1':
+        tool = TOOL_GRIPPER_1_ID
+    elif n == '2':
+        tool = TOOL_GRIPPER_2_ID
+    elif n == '3':
+        tool = TOOL_GRIPPER_3_ID
+    else:
+        raise InvalidUsage(400, 'Should not be here, tool not supported: ' + n)
+    if tool != last_tool:
+        last_tool = tool
+        niryo.change_tool(tool)
+        app.logger.info('Tool changed for ' + n)
+    learning_before = niryo.learning_mode_on
+    niryo.close_gripper(tool, 300)
+    if learning_before == True:
+        niryo.activate_learning_mode(True)
     return 'OK'
