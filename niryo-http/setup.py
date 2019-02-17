@@ -17,5 +17,6 @@ setup(
     install_requires=[
         'Flask >=0.11.1',
         'Jinja2 >=2.8.1',
+        'jsonschema >=2.6.0',
     ],
 )
