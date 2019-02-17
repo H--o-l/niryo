@@ -113,3 +113,27 @@ def get_learning():
 def get_io():
     response = flask.jsonify(str(niryo.digital_io_state))  # TODO make it json
     return response
+
+@app.route('/calibration/auto', methods=['POST'])
+def post_calibration_auto():
+    niryo.calibrate_auto()
+    return 'OK'
+
+@app.route('/calibration/manual', methods=['POST'])
+def post_calibration_manual():
+    niryo.calibrate_manual()
+    return 'OK'
+
+@app.route('/learning/<boolean>', methods=['POST'])
+def post_learning(boolean):
+    niryo.activate_learning_mode(boolean == 'true')
+    return 'OK'
+
+@app.route('/joints', methods=['POST'])
+def post_joints():
+    copy = niryo.joints[:]
+    copy[2] = copy[2] + 0.1
+    copy[0] = copy[0] - 0.1
+    niryo.move_joints(copy)
+
+    return 'OK'
