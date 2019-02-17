@@ -1,6 +1,7 @@
 [Unit]
 Description=niryo-http
 After=network.target
+Requires=niryo_one_ros.service
 
 [Service]
 User=niryo
@@ -19,6 +20,8 @@ Environment="ROS_ETC_DIR=/opt/ros/kinetic/etc/ros"
 Environment="PYTHONPATH=/home/niryo/catkin_ws/devel/lib/python2.7/dist-packages:/opt/ros/kinetic/lib/python2.7/dist-packages:/home/niryo/catkin_ws/src/niryo_one_python_api/src/niryo_python_api"
 Environment=PYTHONUNBUFFERED=true
 ExecStart=/home/niryo/.local/bin/niryo-http
+Restart=on-failure
+RestartSec=10
 
 [Install]
 WantedBy=multi-user.target
