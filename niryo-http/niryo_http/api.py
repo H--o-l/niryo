@@ -194,6 +194,8 @@ def post_joints():
     return 'OK'
 
 # curl 192.168.0.21:6000/joints/0 -d '-0.1'
+# In PowerShell:
+# curl 192.168.0.21:6000/joints/0 -Body '-0.1' -Method POST
 @app.route('/joints/<n>', methods=['POST'])
 def post_joint(n):
     if int(n) < 0 or int(n) > 5:
