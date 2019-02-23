@@ -1,0 +1,9 @@
+[Unit]
+Description=Start niryo-http some time after niryo_one_ros
+BindsTo=niryo_one_ros.service
+
+[Timer]
+OnActiveSec=20s
+
+[Install]
+WantedBy=timers.target

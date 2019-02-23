@@ -55,11 +55,30 @@
     - Reload systemd files
     - Restart niryo-http
 
+- name: Create systemd timer
+  template:
+    src: etc/systemd/system/niryo-http.timer
+    dest: /etc/systemd/system/niryo-http.timer
+  become: yes
+  tags: [conf]
+  notify:
+    - Reload systemd files
+    - Restart niryo-http
+
 - meta: flush_handlers
 
-- name: Enable and start niryo-http
-  service:
-    name: niryo-http
-    enabled: true
+- name: Enable and start niryo-http timer
+  systemd:
+    name: niryo-http.timer
     state: started
+    enabled: true
   become: yes
+
+- name: Check niryo-http API
+  uri:
+    url: 'http://{{ inventory_hostname }}:6000/'
+    status_code: [200]
+  register: result
+  until: result.status == 200
+  retries: 10
+  delay: 2

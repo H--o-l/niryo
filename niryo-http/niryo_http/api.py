@@ -79,28 +79,48 @@ class RospyHandler(threading.Thread):
 
 def stop(*argv):
     global rospy_handler
-    niryo.activate_learning_mode(True)
+    try:
+        niryo.activate_learning_mode(True)
+    except:
+        pass
     rospy.signal_shutdown('Server going down')
     rospy_handler.join();
     print '--- rospy closing ok ---'
     raise RuntimeError('Server going down')
 
-def start():
-    global rospy_handler
-    rospy_handler = RospyHandler()
-    signal.signal(signal.SIGINT, stop)
-    signal.signal(signal.SIGTERM, stop)
-    rospy_handler.start()
-    while not niryo:
-        time.sleep(1)
-    print '--- rospi init ok ---'
+def exit_with_error():
     try:
+        rospy.signal_shutdown('Server going down')
+    except:
+        pass
+    app.logger.exception('niryo-http: kill invoqued')
+    sys.exit(1)
+
+def start():
+    try:
+        global rospy_handler
+        rospy_handler = RospyHandler()
+        signal.signal(signal.SIGINT, stop)
+        signal.signal(signal.SIGTERM, stop)
+        rospy_handler.start()
+        timeout = 0
+        while not niryo and rospy_handler.isAlive():
+            if timeout > 10:
+                exit_with_error()
+            time.sleep(1)
+            timeout = timeout + 1
+        if not rospy_handler.isAlive():
+            exit_with_error()
+        print '--- rospi init ok ---'
         app.run(host='0.0.0.0', port=6000, threaded=False, debug=False, use_reloader=False)
     except RuntimeError, msg:
+        print('coucou !')
         if str(msg) == "Server going down":
             print '--- app closing ok ---'
         else:
             raise RuntimeError(msg)
+    except:
+        exit_with_error()
 
 def list_routes():
     routes = {}

@@ -6,6 +6,6 @@
 
 - name: Restart niryo-http
   service:
-    name: niryo-http
+    name: niryo-http.service
     state: restarted
   become: true

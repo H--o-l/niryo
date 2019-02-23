@@ -1,7 +1,6 @@
 [Unit]
-Description=niryo-http
-After=network.target
-Requires=niryo_one_ros.service
+Description=Niryo-http
+After=network-online.target
 
 [Service]
 User=niryo
