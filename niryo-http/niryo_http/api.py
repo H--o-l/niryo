@@ -163,12 +163,18 @@ def get_io():
 
 @app.route('/calibration/auto', methods=['POST'])
 def post_calibration_auto():
-    niryo.calibrate_auto()
+    try:
+        niryo.calibrate_auto()
+    except NiryoOneException as e:
+        raise InvalidUsage(503, str(e))
     return 'OK'
 
 @app.route('/calibration/manual', methods=['POST'])
 def post_calibration_manual():
-    niryo.calibrate_manual()
+    try:
+        niryo.calibrate_manual()
+    except NiryoOneException as e:
+        raise InvalidUsage(503, str(e))
     return 'OK'
 
 # curl -X POST 192.168.0.21:6000/start
@@ -209,7 +215,7 @@ def post_joints():
     try:
         niryo.move_joints(data)
     except NiryoOneException as e:
-        raise InvalidUsage(400, str(e))
+        raise InvalidUsage(503, str(e))
 
     return 'OK'
 
@@ -232,7 +238,7 @@ def post_joint(n):
     try:
         niryo.move_joints(joints)
     except NiryoOneException as e:
-        raise InvalidUsage(400, str(e))
+        raise InvalidUsage(503, str(e))
 
     return 'OK'
 
