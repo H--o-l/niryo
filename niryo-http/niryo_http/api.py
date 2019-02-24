@@ -11,7 +11,8 @@ import logging
 import signal
 
 # Niryo API
-from niryo_one_python_api.niryo_one_api import *
+# from niryo_one_python_api.niryo_one_api import *
+from hacked_niryo_one_python_api import *
 import rospy
 
 app = flask.Flask(__name__)
@@ -241,6 +242,69 @@ def post_joint(n):
         raise InvalidUsage(503, str(e))
 
     return 'OK'
+
+@app.route('/joints_abs/<n>', methods=['POST'])
+def post_joint_abs(n):
+    if int(n) < 0 or int(n) > 5:
+        raise InvalidUsage(400, 'There is no joint n=' + n)
+    data = flask.request.get_json(force=True)
+    schema = {'type': 'number'}
+    try:
+        validate(data, schema)
+    except ValidationError as e:
+        raise InvalidUsage(400, e.message)
+    joints = niryo.joints
+    joints[int(n)] = joints[int(n)] + data
+
+    try:
+        niryo.move_joints(joints)
+    except NiryoOneException as e:
+        raise InvalidUsage(503, str(e))
+
+    return 'OK'
+
+@app.route('/joints_async/<n>', methods=['POST'])
+def post_joint_async(n):
+    if int(n) < 0 or int(n) > 5:
+        raise InvalidUsage(400, 'There is no joint n=' + n)
+    data = flask.request.get_json(force=True)
+    schema = {'type': 'number'}
+    try:
+        validate(data, schema)
+    except ValidationError as e:
+        raise InvalidUsage(400, e.message)
+    joints = niryo.joints
+    joints[int(n)] = data
+
+    try:
+        niryo.abort_current_action()
+        niryo.move_joints_non_blocking(joints)
+    except NiryoOneException as e:
+        raise InvalidUsage(503, str(e))
+
+    return 'OK'
+
+@app.route('/joints_async_abs/<n>', methods=['POST'])
+def post_joint_async_abs(n):
+    if int(n) < 0 or int(n) > 5:
+        raise InvalidUsage(400, 'There is no joint n=' + n)
+    data = flask.request.get_json(force=True)
+    schema = {'type': 'number'}
+    try:
+        validate(data, schema)
+    except ValidationError as e:
+        raise InvalidUsage(400, e.message)
+    joints = niryo.joints
+    joints[int(n)] = data + joints[int(n)]
+
+    try:
+        niryo.abort_current_action()
+        niryo.move_joints_non_blocking(joints)
+    except NiryoOneException as e:
+        raise InvalidUsage(503, str(e))
+
+    return 'OK'
+
 
 @app.route('/gripper/unset', methods=['POST'])
 def unset_gripper():
