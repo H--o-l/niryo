@@ -34,11 +34,21 @@
               text-transform: None !important;
               text-align: left;
             }
-            .reveal ul {
-              display: block;
-            }
+            .reveal ul,
             .reveal ol {
               display: block;
+            }
+            .reveal blockquote,
+            .reveal pre {
+              width: 100%;
+            }
+            .reveal .centered {
+              display: table;
+              margin: 0 auto;
+            }
+            .reveal .center > * {
+              display: table;
+              margin: 0 auto;
             }
         </style>
 
@@ -86,7 +96,7 @@ très rapide
 
 ---
 
-Importance de l'informatique
+## Importance de l'informatique
 
 <br/>
 
@@ -114,82 +124,458 @@ Algorithme pour faire le tri dans les informations.
 
 <br/>
 
-### Alan Mathison Turing
+On part des mathétiques, et de l'électronique analogique (onde).
+
+<br/>
+
+<img src="/assets/mathematique.gif"  width="38%">
+&emsp;&emsp;
+<img src="/assets/wave.gif"  width="50%">
+
+
+---
+
+
+### Alan Mathison Turing - Machine de Turing - 1936
+
 
 Un programme est une liste d'instructions (+ que des opérations mathétiques),
 qui peut se ré-écrire lui même.
 
-&emsp;&emsp;&#8595;
 
-L'éléctronique n'éxiste pas encore.
+<img src="/assets/turing_1.png"  width="50%">
 
-&emsp;&emsp;&#8595;
+<img src="/assets/turing_2.jpg"  width="40%">
+<img src="/assets/turing_3.jpg"  width="50%">
 
-### Programme Apollo
+Note:
+Parler un peu de la vie de Turing, puis de la différence avec les mathétiques.
+Aussi machines mécanique
 
-Circuit imprimé
 
-Calcul de trajectoire (_Les figures de l'ombre_)
+---
+
+### L'éléctronique numérique apparait (0-1)
+
+<br/>
+
+<img src="/assets/tube.jpg"  height="444px">
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+<img src="/assets/triode.png">
+
+<br/>
+
+IBM commercialise les permiers gros calculateurs.
+
+Calcul de trajectoire balistique (_Les figures de l'ombre_).
+
+&#x21D2; Néanmoins l'éléctronique n'est pas prêt.
+
+&emsp; Le terme bug vient de cette époque.
+
+---
+
+### Jack St. Clair Kilby - Circuit intégré 1959
+
+<br/>
+
+1. Fiable
+2. Beaucoup plus petit
+
+<br/>
+
+<img src="/assets/integrated_1.jpg"  height="300px" class="centered">
 
 <br/>
 
 
+&#x21D2; L'éléctronique est prêt
+
+Note:
+Travaillait pour Texas Instruments.
+
 ---
 
-<!-- .element: class="full-screen" -->
-```text
-+-----------------------------+-------------------------------+
-|                             |                               |   +---+
-|  Electronique Numérique     |  Machine de Turing            |       |
-|                             |                               |       |
-|          |                  |                               |       |
-|          v                  |                               |       |
-|                             |                               |       |
-|  Circuits intégrés          |                               |       |
-|                             |                               |       |  Materiel
-+-----------------------------+-------------------------------+       |
-|                                                             |       |
-|                        CPU (language assembleur)            |       |
-|                                                             |       |
-|            Deux grandes familles : ARM et x86               |       |
-|                                                             |   +---+
-+---------------------------------------------+---------------+
-|                                                             |   +---+
-|                 Compilateurs (gcc, gnat)    ^               |       |
-|                                                             |       |
-+---------------------------------------------+---------------+       |
-|                                                             |       |
-|                Drivers (fabricants de matériel)  (C)        |       |
-|                (Trés rapide mais très spécifique)           |       |
-|                                                             |       |
-+---------------+---------------------------------------------+       |
-|               |                                             |       |  Logiciel
-| OS temps réel | OS (MacOS/iOS, Windows, Linux, Android) (C) |       |
-| (Embarqué, ms)| (Multithread, ordonanceur, TCP/IP)          |       |  (tout est compilé
-|               |                                             |       |    vers l'assembleur)
-+---------------+-----------+---------------------------------+       |
-|                           |                                 |       |
-|      Interpréteurs        |       Programmes natifs         |       |
-|      (Lents mais cross)   |       (Rapides mais spécifiques)|       |
-|                           |                                 |       |
-|      shell/bash (CLI)     |       go                        |       |
-|      python               |       c++                       |       |
-|      java                 |       rust                      |       |
-|      javascript           |                                 |       |
-|       - node (v8)         |                                 |       |
-|       - chrome (v8)       |                                 |       |
-|       - firefox           |                                 |       |
-|       - safari            |                                 |       |
-|       - edge              |                                 |       |
-|                           |                                 |   +---+
-+---------------------------+---------------------------------+
-|                           |
-|      Transpileur          |
-|                           |
-+---------------------------+
+### BASIC - 1964
+
+<br/>
+
+Interactif, il facilite l'apprentissage et la résolution d'erreurs au fur et à mesure de l'éxécution (// Python).
+
+<br/>
+
+```BASIC
+ 10 INPUT "Quel est votre nom ? "; NOM$
+ 20 PRINT "Bonjour "; NOM$
+ 30 INPUT "Combien d'étoiles voulez-vous ? "; NOMBRE
+ 40 LET ETOILE$ = ""
+ 50 FOR I = 1 TO NOMBRE
+ 60 LET ETOILE$ = ETOILE$ + "*"
+ 70 NEXT I
+ 80 PRINT ETOILE$
+ 90 INPUT "Voulez-vous plus d'étoiles ? "; ETOILE$
+100 IF LEN(ETOILE$) = 0 THEN GOTO 90
+110 LET ETOILE$ = LEFT$(ETOILE$, 1)
+120 IF (ETOILE$ = "O") OR (ETOILE$ = "o") THEN GOTO 30
+130 PRINT "Au revoir ";
+140 FOR I = 1 TO 200
+150 PRINT NOM$; " ";
+160 NEXT I
+170 LPRINT
 ```
 
 ---
+
+### Margaret Hamilton - Programme Apollo - 1966
+(Et missiles inter-continentaux)
+
+<br/>
+
+<img src="/assets/Margaret_Hamilton.jpg"  height="500px">
+<img src="/assets/apollo.jpg"  width="530px">
+
+Aparté :
+
+Disparission de l'informatique Russe dans les années 70 dû au manque de standardisation.
+
+---
+
+Avec l'électronique intégré la puissance de calcul grandie, les sciences de
+l'informatique prennent de l'importance.
+
+<br/>
+
+1. Différence temps d'éxécution temps de stockage et temps de progammation
+
+&emsp;&#x21D2; File d'execution &#x21D2; **OS** (kernel)
+
+2. Besoin de "languages" évolués
+
+&emsp;&#x21D2; **Compilateurs & interpréteurs**
+
+3. Plus que des nombres
+
+&emsp;&#x21D2; Chaine de caractère & pixel & son & image & génome & ...
+
+---
+
+<!-- .element: class="full-screen" -->
+
+Un ordinateur, le plus petit élément indivisible de l'informatique :
+
+```text
+     +-------------------------------------+-----------------------+
+     |                                     |                       |  +---+
+     |  CPU / Microcontroleurs /etc        | Unités spacialisés :  |      |
+     |  Language :  jeux d'instructions,   | - calcul flottant     |      |
+>>   |              assembleur             | - GPU                 |      | Matériels
+^    |  Deux grandes familles : ARM et x86 | - cryptographie       |      |
+^    |                                     | - réseau de neuronnes |      |
+^    |                                     |                       |  +---+
+^    +-------------------------------------+-----------------------+
+^                                                                     +---+
+^          ^                                                ^             | Théorie des languages
+^          ^     Programmes compilés, chargés en mémoire    ^             | Machine de Turing
+^          ^                                                ^             |
+^                                                                     +---+
+^    +-------------------------------------------------------------+
+^    |                                                             |  +---+
+^    |                   Drivers, TCP/IP                           |      |
+^    |                                                             |      |
+^    +--------------------+----------------------------------------+      |
+^    |                    |                                        |      |
+^    |                    |                                        |      | Programmes en C
+^    | OS spécialisés :   | OS génériques :                        |      | Pilotent l'électronique
+^    | - temps réel       | MacOS/iOS, Windows, Linux, Android     |      | Attribuent les ressources
+^    | - supercalculateur |                                        |      | Assure la sécurité
+^    |                    |                                        |      |
+^    |                    |                                        |      |
+^    +--------------------+----------------------------------------+      |
+^    |                                                             |      |
+^    |              Isolement, sécurité informatique               |      |
+^    |                                                             |  +---+
+^    +----------------------------+--------------------------------+
+^    |                            |                                |  +---+
+^    |                            |                                |      |
+^    | Programme compilé, natif : | Script interprétés :           |      |
+^    | - rapide è exec            | - lent                         |      |
+^    | - long à compiler          | - cross platforme              |      | Programmes utilisateurs
+^<   | - un seul OS à la fois     | - evolue rapidement            |      |
+     |                            |                                |      |
+     | C, C++, Go, Rust, Ada, ... |  Python, Java, Javascript, ... |      |
+     |                            |  ~~~~~~                        |      |
+     |                            |                                |  +---+
+     +----------------------------+--------------------------------+
+```
+
+Note:
+Bien expliquer le raccourci sur la gauche pour les microcontroleurs.
+Empilement technologique, stack.
+Unité élémentaire de l'informatique (plus petit élément indivisible).
+Comprend TCP/IP
+
+---
+
+<!-- .element: class="center" -->
+
+### Microcontroleur 1-2$ &emsp;&emsp;&emsp; Ordinateur 20$&emsp;
+
+<br/>
+<br/>
+
+&emsp;&emsp;&emsp;<img src="/assets/attiny.jpg" width="258px">
+&emsp;&emsp;&emsp;&emsp;&emsp;
+<img src="/assets/raspberry.jpg" width="400px">
+
+---
+
+### Internet
+
+https://internet-map.net
+
+https://www.submarinecablemap.com
+
+https://cybermap.kaspersky.com
+
+---
+
+40 ans que l'on utilise le même empilement de technologies.
+
+<br/>
+
+Le matériel de demain :
+
+Réseau de neuronnes et ordinateurs quantiques.
+
+<br/>
+
+&#x21D2; De nouveau languages, théories, OS sont en cours de développement.
+
+---
+
+Ce "plus petit élément" est miniaturisé, optimisé, et standardisé encore et encore.
+
+Améliorations de notre robot :
+- simplificité d'utilisation
+- réduction du coût
+
+<br/>
+
+<img src="/assets/raspberry.jpg" width="400px">
+<img src="/assets/niryo.jpeg" width="500px">
+
+---
+
+## Les grandes questions d'achitecture de l'informatique
+
+<br/>
+
+1. Monolithique versus micro
+2. Open-source versus propriétaire
+3. Compilé versus interprété
+4. Sécurité (bug)
+5. ...
+
+---
+
+### Monolithique versus micro
+
+<br/>
+
+1990s : Unix versus Linux
+
+<br/>
+
+On a essayé les micro-OS mais les bénéfices étaient trop faibles pour la réduction de performance.
+
+<br/>
+
+Les OS sont monolithiques, mais modulables à la compilation.
+
+<br/>
+
+---
+
+### Monolithique versus micro.
+
+Internet, micro-services et micro-ordinateurs progressent.
+
+<img src="/assets/docker.jpg">
+
+Note:
+Cloud
+Scalabilité & sécurité
+Permet d'avoir Netfix sans pannes
+
+---
+
+### Open-source versus propriétaire
+
+
+2001 :
+
+> Linux is a cancer that attaches itself in an intellectual property sense to everything it touches
+>
+> Steve Ballmer - Microsoft CEO
+
+
+2016 :
+
+Microsoft devient un des 15 membres Platinium de la linux fondation (> 500 k$ an).
+
+<br/>
+
+L'open source est une ressource stratégique :
+- controler
+- exploiter
+
+Mais tout le monde en bénéficie, petit & grand, publique & privé.
+
+Note:
+Pose des questions économique : sort du PIB
+Dès domaines important y échappe totalement => militaire
+
+---
+
+### Compilé versus interprété
+
+<br/>
+
+#### C
+```c
+// File hello.c
+#include <stdio.h>
+int main()
+{
+   printf("Hello, World!\n");
+   return 0;
+}
+```
+```sh
+$ gcc -o hello hello.c
+$ ./hello
+Hello, World!
+```
+
+<br/>
+
+#### Python
+
+```py
+# File hello.py
+print("Hello, World!")
+exit(0)
+```
+```sh
+$ python hello.py
+Hello, World!
+```
+
+---
+
+### Compilé versus interprété
+
+<br/>
+
+#### C
+
+<img src="/assets/hello_1.gif">
+
+---
+
+### Compilé versus interprété
+
+<br/>
+
+#### Python
+
+<img src="/assets/hello_2.gif">
+
+---
+
+### Sécurité
+
+- Sécurité des personnes - avion, train, robot, ...
+- Sécurité des machines - spatial
+- Sécurité des données
+
+<br/>
+
+#### Statégies
+
+- Redondance des programmes et des machines
+- Tests automatisés, unitaires, d'intégration, système, ...
+- Mises à jours régulières, à distance, après la mise en service
+- Diagnostique à distance
+- Simplicité versus complexité
+- Languages formels (train)
+
+Les réseaux sont une faiblesse pour la sécurité (hacking) et une bénédiction (mises à jours, diagnostique).
+
+---
+
+### Languages les plus utilisés
+
+- Assembleur &emsp;&#8592;
+- C &emsp;&#8592;
+- COBOL
+- C++
+- Perl
+- PHP
+- Python
+- Python v3 &emsp;&#8592;
+- Ruby
+- Java &emsp;&#8592;
+- Javascript - html - css &emsp;&#8592;
+- Go
+- Rust
+- Swift &emsp;&#8592;
+- Kotlin
+
+---
+
+### Languages les plus utilisés
+
+- **Assembleur**
+
+  Le language de plus bas niveau, le seul compréhensible par un ordinateur
+
+- **C**
+
+  Le language des drivers et des OS
+
+- **Python v3**
+
+  Notre language, multitache
+
+- **Java**
+
+  Beaucoup d'offre d'emploi, multitache et Android
+
+- **Javascript - html - css**
+
+  Languages des navigateurs internet
+
+- **Swift**
+
+  Languages de iOS
+
+---
+
+### Python
+
+#### Les variables
+
+#### Les conditions
+
+#### Les boucles
+
+#### Les structures complexes
+
+---
+
+### Divers
+
 
 #### Normes
 &nbsp;&nbsp;&nbsp;&nbsp; ISO8601: `2018-07-10T00:00:00.000Z`, ...
@@ -206,11 +592,9 @@ Calcul de trajectoire (_Les figures de l'ombre_)
 #### Package manager
 &nbsp;&nbsp;&nbsp;&nbsp; npm, pip, apt-get, ...
 
-
 ---
 
-
-
+# Merci !
 
                     </script>
                 </section>
