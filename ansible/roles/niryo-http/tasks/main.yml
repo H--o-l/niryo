@@ -33,7 +33,6 @@
     checksum: true # not needed but logic
   with_items:
     - {src: niryo_http/, dest: niryo_http} # src
-    - {src: setup.cfg, dest: setup.cfg}
     - {src: setup.py, dest: setup.py}
   register: src
 

@@ -21,7 +21,7 @@ app.logger.setLevel(logging.INFO)
 niryo = None
 rospy_handler = None
 last_tool = TOOL_NONE
-supported_tools = ['3'] # Only grip 3 for now, otherwise /!\ Rospi deadlock
+supported_tools = ['3']  # Only grip 3 for now, otherwise /!\ Rospi deadlock
 
 class InvalidUsage(Exception):
     def __init__(self, code, message=None, body=None):
@@ -74,7 +74,8 @@ class RospyHandler(threading.Thread):
 
     def run(self):
         global niryo
-        rospy.init_node('niryo_one_python_api', anonymous=True, disable_signals=True)
+        rospy.init_node('niryo_one_python_api', anonymous=True,
+                        disable_signals=True)
         niryo = NiryoOne()
         rospy.spin()
 
@@ -85,7 +86,7 @@ def stop(*argv):
     except:
         pass
     rospy.signal_shutdown('Server going down')
-    rospy_handler.join();
+    rospy_handler.join()
     print '--- rospy closing ok ---'
     raise RuntimeError('Server going down')
 
@@ -113,7 +114,8 @@ def start():
         if not rospy_handler.isAlive():
             exit_with_error()
         print '--- rospi init ok ---'
-        app.run(host='0.0.0.0', port=6000, threaded=False, debug=False, use_reloader=False)
+        app.run(host='0.0.0.0', port=6000, threaded=False, debug=False,
+                use_reloader=False)
     except RuntimeError, msg:
         print('coucou !')
         if str(msg) == "Server going down":
@@ -333,7 +335,7 @@ def open_gripper(n):
         app.logger.info('Tool changed for ' + n)
     learning_before = niryo.learning_mode_on
     niryo.open_gripper(tool, 300)
-    if learning_before == True:
+    if learning_before is True:
         niryo.activate_learning_mode(True)
     return 'OK'
 
@@ -358,6 +360,6 @@ def close_gripper(n):
         app.logger.info('Tool changed for ' + n)
     learning_before = niryo.learning_mode_on
     niryo.close_gripper(tool, 300)
-    if learning_before == True:
+    if learning_before is True:
         niryo.activate_learning_mode(True)
     return 'OK'

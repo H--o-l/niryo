@@ -9,7 +9,7 @@ Learning support for Python and Niryo.
 See sub-folders.
 
 
-Ressources
+Resources
 ----------
 
 `Niryo Python API`_
@@ -20,7 +20,7 @@ Ressources
 Notes
 -----
 
-Add Python et pip to windows 10 path in PowerShell:
+Add Python and pip to windows 10 path in PowerShell:
 
 .. code:: powershell
 

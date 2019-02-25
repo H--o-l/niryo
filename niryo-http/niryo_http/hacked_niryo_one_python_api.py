@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# flake8: noqa
+
 # niryo_one_api.py
 # Copyright (C) 2017 Niryo
 # All rights reserved.

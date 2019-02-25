@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 import keyboard
 import requests
-import time
 
 endpoint = 'http://192.168.0.21:6000'
 
@@ -11,7 +10,7 @@ ctrl = False
 alt = False
 gripper_open = False
 
-step=0.2
+step = 0.2
 
 mapping = {
     'none': {
@@ -64,11 +63,12 @@ def right():
 def gripper_toogle():
     global gripper_open
     if gripper_open:
-      requests.post(endpoint + '/gripper/3/close')
-      gripper_open = False
+        requests.post(endpoint + '/gripper/3/close')
+        gripper_open = False
     else:
-      requests.post(endpoint + '/gripper/3/open')
-      gripper_open = True
+        requests.post(endpoint + '/gripper/3/open')
+        gripper_open = True
+
 
 keyboard.on_press_key('ctrl', lambda _: ctrl_change(True))
 keyboard.on_release_key('ctrl', lambda _: ctrl_change(False))
@@ -76,7 +76,7 @@ keyboard.on_release_key('ctrl', lambda _: ctrl_change(False))
 keyboard.on_press_key('shift', lambda _: alt_change(True))
 keyboard.on_release_key('shift', lambda _: alt_change(False))
 
-try :
+try:
     while True:
         key = keyboard.read_key()
         if key == 'up':
