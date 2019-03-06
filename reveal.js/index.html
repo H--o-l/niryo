@@ -157,13 +157,7 @@ Aussi machines mécanique
 
 ### L'éléctronique numérique apparait (0-1)
 
-<br/>
-
-<img src="/assets/tube.jpg"  height="444px">
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-<img src="/assets/triode.png">
-
-<br/>
+<img src="/assets/tube.jpg"  height="444px" class="centered">
 
 IBM commercialise les permiers gros calculateurs.
 
@@ -172,6 +166,22 @@ Calcul de trajectoire balistique (_Les figures de l'ombre_).
 &#x21D2; Néanmoins l'éléctronique n'est pas prêt.
 
 &emsp; Le terme bug vient de cette époque.
+
+---
+
+# Transistor
+
+<br/>
+
+<div class="centered">
+
+  <img src="/assets/npn.png"  height="300px">
+  &emsp;&emsp;&emsp;
+  <img src="/assets/triode.png">
+</div>
+
+Note:
+Interrupteur
 
 ---
 
@@ -196,11 +206,115 @@ Travaillait pour Texas Instruments.
 
 ---
 
+# CPU 
+
+<img src="/assets/cpu_1.jpg"  width="420px" class="centered">
+
+<br/>
+
+(merci wikipedia)
+
+---
+
+# CPU 
+
+<br/>
+
+<img src="/assets/cpu_3.jpg"  width="420px" class="centered">
+
+<br/>
+
+<img src="/assets/cpu_2.jpg"  width="420px" class="centered">
+
+
+---
+
+# CPU 
+
+
+<img src="/assets/cpu_4.png" width="600px" class="centered">
+
+<br/>
+
+<img src="/assets/cpu_7.png"  width="600px" class="centered">
+
+---
+
+<!-- .element: class="full-screen" -->
+
+
+# Assembleur
+
+<br/>
+
+
+```assembly
+                 .global _start
+
+                 .comm   BUFF    , N
+
+                 _start: mov     $3      , %eax
+                         mov     $0      , %ebx
+                         mov     $BUFF   , %ecx
+                         mov     $N      , %edx
+                         int     $0x80
+
+                         mov     %eax    , %edx
+                         mov     $4      , %eax
+                         mov     $1      , %ebx
+                         mov     $BUFF   , %ecx
+                         int     $0x80
+
+                         mov     $1      , %eax
+                         mov     $0      , %ebx
+                         int     $0x80
+```
+
+
+---
+
+# CPU 
+
+<img src="/assets/cpu_6.png"  width="600px" class="centered">
+
+<br/>
+
+Note:
+ALU = machine de Turing
+
+
+---
+
+# CPU 
+
+<img src="/assets/running_cpu.gif" width="600px" class="centered">
+
+Note:
+url http://www.righto.com/2015/12/reverse-engineering-arm1-ancestor-of.html
+
+La clock est en haut au milieu, la fréquence est de 1 ou 2 hertz.
+
+---
+
+### Margaret Hamilton - Programme Apollo - 1966
+(Et missiles inter-continentaux)
+
+<img src="/assets/Margaret_Hamilton.jpg"  height="500px">
+<img src="/assets/apollo.jpg"  width="530px">
+
+Aparté :
+
+Disparission de l'informatique Russe dans les années 70 dû au manque de standardisation.
+
+---
+
 ### BASIC - 1964
 
 <br/>
 
-Interactif, il facilite l'apprentissage et la résolution d'erreurs au fur et à mesure de l'éxécution (// Python).
+On ne code déjà plus en assembleur.
+
+Le BASIC est interactif, il facilite l'apprentissage et la résolution d'erreurs au fur et à mesure de l'éxécution (// Python).
 
 <br/>
 
@@ -226,36 +340,18 @@ Interactif, il facilite l'apprentissage et la résolution d'erreurs au fur et à
 
 ---
 
-### Margaret Hamilton - Programme Apollo - 1966
-(Et missiles inter-continentaux)
-
-<br/>
-
-<img src="/assets/Margaret_Hamilton.jpg"  height="500px">
-<img src="/assets/apollo.jpg"  width="530px">
-
-Aparté :
-
-Disparission de l'informatique Russe dans les années 70 dû au manque de standardisation.
-
----
-
 Avec l'électronique intégré la puissance de calcul grandie, les sciences de
 l'informatique prennent de l'importance.
 
 <br/>
 
-1. Différence temps d'éxécution temps de stockage et temps de progammation
+- OS
 
-&emsp;&#x21D2; File d'execution &#x21D2; **OS** (kernel)
+- Languages "évolués" + Compilateurs & interpréteurs
 
-2. Besoin de "languages" évolués
+- Librairies
 
-&emsp;&#x21D2; **Compilateurs & interpréteurs**
-
-3. Plus que des nombres
-
-&emsp;&#x21D2; Chaine de caractère & pixel & son & image & génome & ...
+- Numérisation
 
 ---
 
@@ -329,6 +425,19 @@ Comprend TCP/IP
 
 ---
 
+Ce "plus petit élément" est miniaturisé, optimisé, et standardisé encore et encore.
+
+Améliorations de notre robot :
+- simplificité d'utilisation
+- réduction du coût
+
+<br/>
+
+<img src="/assets/raspberry.jpg" width="400px">
+<img src="/assets/niryo.jpeg" width="500px">
+
+---
+
 ### Internet
 
 https://internet-map.net
@@ -353,18 +462,6 @@ Réseau de neuronnes et ordinateurs quantiques.
 
 ---
 
-Ce "plus petit élément" est miniaturisé, optimisé, et standardisé encore et encore.
-
-Améliorations de notre robot :
-- simplificité d'utilisation
-- réduction du coût
-
-<br/>
-
-<img src="/assets/raspberry.jpg" width="400px">
-<img src="/assets/niryo.jpeg" width="500px">
-
----
 
 ## Les grandes questions d'achitecture de l'informatique
 
@@ -437,6 +534,35 @@ Dès domaines important y échappe totalement => militaire
 
 ---
 
+### Open-source versus propriétaire
+
+
+Examples :
+
+```sh
+$ pip install keyboard
+$ pip install requests
+```
+````py
+# -*- coding: utf-8 -*-
+# !/usr/bin/env python3
+
+import keyboard
+import requests
+
+while True:
+  key = keyboard.read_key()
+  if key == 'up':
+    print('up arrow have been pressed')
+    requests.post('http://192.168.0.21:6000/up')
+```
+
+Note:
+Python est open-source, ainsi que plein de librairies, facile à installée grace au gestionnaire de paquet.
+Finalement le programme que l'on écrit n'est qu'une "glu" de librairies open source.
+
+---
+
 ### Compilé versus interprété
 
 <br/>
@@ -503,8 +629,9 @@ Hello, World!
 
 #### Statégies
 
+- Niveaux d'autorisation
 - Redondance des programmes et des machines
-- Tests automatisés, unitaires, d'intégration, système, ...
+- Tests automatisés
 - Mises à jours régulières, à distance, après la mise en service
 - Diagnostique à distance
 - Simplicité versus complexité
@@ -514,7 +641,7 @@ Les réseaux sont une faiblesse pour la sécurité (hacking) et une bénédictio
 
 ---
 
-### Languages les plus utilisés
+### Languages
 
 - Assembleur &emsp;&#8592;
 - C &emsp;&#8592;
@@ -522,8 +649,6 @@ Les réseaux sont une faiblesse pour la sécurité (hacking) et une bénédictio
 - C++
 - Perl
 - PHP
-- Python
-- Python v3 &emsp;&#8592;
 - Ruby
 - Java &emsp;&#8592;
 - Javascript - html - css &emsp;&#8592;
@@ -531,34 +656,39 @@ Les réseaux sont une faiblesse pour la sécurité (hacking) et une bénédictio
 - Rust
 - Swift &emsp;&#8592;
 - Kotlin
+- Python version 2.7
+- Python version 3 &emsp;&#8592;
 
 ---
 
-### Languages les plus utilisés
+### Languages
 
-- **Assembleur**
+- **Assembleur** - bas niveau
 
-  Le language de plus bas niveau, le seul compréhensible par un ordinateur
+- **C** - OS
 
-- **C**
+- **Python v3** - multitache, simplicité
 
-  Le language des drivers et des OS
+- **Java** - multitache, Android
 
-- **Python v3**
+- **Javascript - html - css** - internet
 
-  Notre language, multitache
+- **Swift** - iOS
 
-- **Java**
 
-  Beaucoup d'offre d'emploi, multitache et Android
+---
 
-- **Javascript - html - css**
+### Python
 
-  Languages des navigateurs internet
+- augmentation du nombre d'utilisateurs en continue
 
-- **Swift**
+- courbe d'apprentissage linéaire
 
-  Languages de iOS
+- beaucoup de librairies actuelles (web, calcul, optimisation)
+
+- beaucoup de librairies pour le future : Big Data, IA
+
+- Agréable à utiliser
 
 ---
 
