@@ -673,7 +673,7 @@ Les réseaux sont une faiblesse pour la sécurité (hacking) et une bénédictio
 
 - courbe d'apprentissage linéaire
 
-- beaucoup de librairies utilent aujourd'hui: web
+- beaucoup de librairies utiles aujourd'hui : web
 
 - beaucoup de librairies pour le future : Big Data, IA
 
@@ -681,17 +681,151 @@ Les réseaux sont une faiblesse pour la sécurité (hacking) et une bénédictio
 
 ---
 
-### Python
+# Python
 
-#### Les variables
+1. Les variables
 
-#### Les conditions
+1. Les fonctions
 
-#### Les boucles
+1. Les try-catch (ou try-except)
 
-#### Les structures complexes
+1. Les conditions
+
+1. Les boucles
+
+1. Les classes (programmation objet)
 
 ---
+
+<!-- .element: class="full-screen" -->
+
+## Les variables
+
+
+```py
+# Un commentaire
+a = 2
+type(a) # ⇨ <class 'int'>
+
+une_variable = "coucou !"
+type(une_variable) # ⇨ <class 'str'>
+
+une_autre_variable = 3.14
+type(une_autre_variable) # ⇨ <class 'float'>
+
+a = a + 7 # ⇨ 9
+
+a = a + une_variable # ⇨ Exception : TypeError: unsupported operand type(s) for +: 'int' and 'str'
+
+a = a + une_autre_variable # ⇨ 5.14
+type(a) # ⇨ <class 'float'>
+
+```
+
+Note:
+Typage fort et dynamique et implicite.
+
+---
+
+#### Les fonctions
+```py
+print("coucou") # ⇨ coucou
+type("coucou") # ⇨ <class 'str'>
+
+def une_fonction(a, b, c_as_a_default_value = 12):
+    return (a + b) / c_as_a_default_value
+
+a = une_fonction(6, 18) # ⇨ 2.0
+b = une_fonction(2, 6, 2) # ⇨ 4.0
+
+print(a - b) # => - 2.0
+```
+
+---
+
+## Les try-catch (ou try-except)
+```py
+try:
+    print("une instruction ou tout va bien")
+except:
+    print("on ne passe pas ici")
+
+try:
+    12 / 0
+    print("on ne passe pas ici") # ⇨  après l'exception
+except ZeroDivisionError as a:
+    print("on passe ici")
+    print(a)
+```
+
+---
+
+## Les conditions
+
+```py
+a = 56
+if a > 10:
+    print("c'est vrai")
+else:
+    print("on ne passera pas ici")
+
+if True and a:
+    print("c'est vrai")
+
+if False or 0 or None:
+    print("c'est faux")
+
+if a is None:
+    print("première condition vérifiée")
+elif a < 10:
+    print("première condition fausse mais deuxième ok")
+```
+
+---
+
+## Les boucles
+
+```py
+i = 0
+while i < 10:
+    print((i + 1) * 4) # ⇨ 8, 12, 16, 20, 24, 28, 32, 36, 40
+    i = i + 1
+
+list = ['h', 'e', 'l', 'l', 'o']
+for letter in list:
+    print(letter) # ⇨ h, e, l, l, o
+
+str = 'hello'
+for letter in str:
+    print(letter) # ⇨ h, e, l, l, o
+```
+
+---
+
+## Les classes (programmation objet)
+
+```py
+class Vehicule:
+    def __init__(self, type): # fonction de construction de l'objet
+        self.nb_roues = 'inconnu' # variable nb_roues créée dans à l'objet
+        if type == 'voiture':
+            self.nb_roues = 4
+
+    def nombre_de_roues(self):
+        return self.nb_roues
+
+    def ajouter_une_roue(self):
+        self.nb_roues = self.nb_roues + 1
+
+
+mon_vehicule = Vehicule('voiture')
+print( mon_vehicule.nombre_de_roues() ) # ⇨ 4
+mon_vehicule.ajouter_une_roue()
+print( mon_vehicule.nombre_de_roues() ) # ⇨ 5
+```
+
+---
+
 
 # Merci !
 
