@@ -39,7 +39,7 @@ def alt_change(state):
 #     return requests.get(endpoint + '/joints/' + str(n)).json()
 
 def move_joint(n, value):
-    return requests.post(endpoint + '/joints_abs/' + str(n), str(value))
+    return requests.post(endpoint + '/shift_joint/' + str(n), str(value))
 
 def on_press(toto):
     print(toto)
