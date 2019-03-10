@@ -22,6 +22,14 @@ niryo = None
 rospy_handler = None
 last_tool = TOOL_NONE
 supported_tools = ['3']  # Only grip 3 for now, otherwise /!\ Rospi deadlock
+initial_position = {
+    'x': 0.098737951452,
+    'y': -0.0118353702839,
+    'z': 0.17851385799,
+    'roll': 0.00230999596112,
+    'pitch': 1.64635462913,
+    'yaw': 0.191800997153,
+}
 
 class InvalidUsage(Exception):
     def __init__(self, code, message=None, body=None):
@@ -152,9 +160,35 @@ def get_joint(n):
 def get_hw():
     return flask.jsonify(str(niryo.hw_status))
 
+def get_pose_as_dic():
+    lines = str(niryo.get_arm_pose()).split('\n')
+    # lines example:
+    #   position:
+    #     x: 0.07574896639
+    #     y: -0.00403671971172
+    #     z: 0.163900749158
+    #   rpy:
+    #     roll: -0.0159846819981
+    #     pitch: 1.60377185829
+    #     yaw: 2.89025816394
+    lines = lines[1:4] + lines[5:8]
+    dic = dict()
+    for line in lines:
+        key, value = line.split(': ')
+        key = key.strip()
+        dic[key] = float(value)
+    return dic
+
 @app.route('/pose', methods=['GET'])
 def get_pose():
-    return flask.jsonify(str(niryo.pose))  # TODO make it json
+    return flask.jsonify(get_pose_as_dic())
+
+@app.route('/pose/<axis>', methods=['GET'])
+def get_pose_axis(axis):
+    if axis not in ['x', 'y', 'z', 'roll', 'pitch', 'yaw']:
+        raise InvalidUsage(400, 'unknow axis: ' + str(axis))
+    position = get_pose_as_dic()
+    return flask.jsonify(position[axis])
 
 @app.route('/learning', methods=['GET'])
 def get_learning():
@@ -307,6 +341,111 @@ def post_joint_async_abs(n):
 
     return 'OK'
 
+@app.route('/pose/initial', methods=['POST'])
+def post_pose_initial():
+    global initial_position
+    try:
+        niryo.move_pose(initial_position['x'],
+                        initial_position['y'],
+                        initial_position['z'],
+                        initial_position['roll'],
+                        initial_position['pitch'],
+                        initial_position['yaw'])
+    except NiryoOneException as e:
+        raise InvalidUsage(503, str(e))
+
+    return 'OK'
+
+# curl 192.168.0.21:6000/pose -X POST \
+#   -d '{
+#     "x": 0.07574896639,
+#     "y": -0.00403671971172,
+#     "z": 0.163900749158,
+#     "roll": -0.0159846819981,
+#     "pitch": 1.60377185829,
+#     "yaw": 2.89025816394
+#   }'
+@app.route('/pose', methods=['POST'])
+def post_pose():
+    data = flask.request.get_json(force=True)
+    schema = {
+        'type': 'object',
+        'properties': {
+            'x': {
+                'type': 'number',
+            },
+            'y': {
+                'type': 'number',
+            },
+            'z': {
+                'type': 'number',
+            },
+            'roll': {
+                'type': 'number',
+            },
+            'pitch': {
+                'type': 'number',
+            },
+            'yaw': {
+                'type': 'number',
+            },
+        },
+        'required': ['x', 'y', 'z', 'roll', 'pitch', 'yaw'],
+        'additionalProperties': False,
+    }
+    try:
+        validate(data, schema)
+    except ValidationError as e:
+        raise InvalidUsage(400, e.message)
+
+    try:
+        niryo.move_pose(data['x'], data['y'], data['z'],
+                        data['roll'], data['pitch'], data['yaw'])
+    except NiryoOneException as e:
+        raise InvalidUsage(503, str(e))
+
+    return 'OK'
+
+@app.route('/pose/<axis>', methods=['POST'])
+def post_pose_axis(axis):
+    if axis not in ['x', 'y', 'z', 'roll', 'pitch', 'yaw']:
+        raise InvalidUsage(400, 'unknow axis: ' + str(axis))
+    data = flask.request.get_json(force=True)
+    schema = {'type': 'number'}
+    try:
+        validate(data, schema)
+    except ValidationError as e:
+        raise InvalidUsage(400, e.message)
+
+    p = get_pose_as_dic()
+    p[axis] = data
+
+    try:
+        niryo.move_pose(p['x'], p['y'], p['z'],
+                        p['roll'], p['pitch'], p['yaw'])
+    except NiryoOneException as e:
+        raise InvalidUsage(503, str(e))
+
+    return 'OK'
+
+@app.route('/shift_pose/<axis>', methods=['POST'])
+def post_shift_pose_axis(axis):
+    if axis not in ['x', 'y', 'z', 'roll', 'pitch', 'yaw']:
+        raise InvalidUsage(400, 'unknow axis: ' + str(axis))
+    data = flask.request.get_json(force=True)
+    schema = {'type': 'number'}
+    try:
+        validate(data, schema)
+    except ValidationError as e:
+        raise InvalidUsage(400, e.message)
+
+    try:
+        niryo.shift_pose(['x', 'y', 'z', 'roll', 'pitch', 'yaw'].index(axis),
+                         data)
+    except NiryoOneException as e:
+        raise InvalidUsage(503, str(e))
+
+    return 'OK'
 
 @app.route('/gripper/unset', methods=['POST'])
 def unset_gripper():
