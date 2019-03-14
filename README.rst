@@ -39,3 +39,9 @@ Mount niryo rpi folder with sshfs:
 .. code:: shell
 
  sshfs niryo@<niryo-IP>:/home/niryo mount
+
+
+GitHub Pages link:
+------------------
+
+https://h--o-l.github.io/niryo/
