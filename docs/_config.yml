@@ -1,4 +1,4 @@
-theme: jekyll-theme-minimal
+remote_theme: H--o-l/minimal
 relative_links:
   enabled: true
   collections: true
@@ -7,4 +7,4 @@ author :
   email : hoel.iris@gmail.com
 include:
   - index.md
-  
+

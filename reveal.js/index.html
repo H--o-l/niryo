@@ -76,6 +76,8 @@
 
 # L' Informatique
 
+## Python
+
 Note:
 Beaucoup de terme Anglais
 
@@ -133,7 +135,6 @@ Mathématiques et électronique analogique
 
 Un programme est une liste d'instructions.
 
-<br/>
 
 <img src="/assets/turing_1.png"  width="50%">
 
@@ -351,51 +352,44 @@ Avec l'électronique intégré la puissance de calcul augmente.
 
 <!-- .element: class="full-screen" -->
 
-Un ordinateur, le plus petit élément indivisible de l'informatique :
-
 ```text
-     +-------------------------------------+-----------------------+
-     |                                     |                       |  +---+
-     |  CPU / Microcontrôleurs             | Unités specialisées : |      |
-     |  Langage :  jeux d'instructions,    | - calcul flottant     |      |
->>   |              assembleur             | - GPU                 |      | Matériel
-^    |  Deux grandes familles : ARM et x86 | - cryptographie       |      |
-^    |                                     | - réseau de neurones  |      |
-^    |                                     |                       |  +---+
-^    +-------------------------------------+-----------------------+
-^
-^          ^                                                ^
-^          ^     Programmes compilés, chargés en mémoire    ^
-^          ^                                                ^
-^
-^    +-------------------------------------------------------------+
-^    |                                                             |  +---+
-^    |                   Drivers, TCP/IP                           |      |
-^    |                                                             |      |
-^    +-------------------------------------+-----------------------+      |
-^    |                                     |                       |      |
-^    |                                     |                       |      | Programmes en C
-^    | OS génériques :                     | OS spécialisés :      |      | Pilotent l'électronique
-^    | MacOS/iOS, Windows, Linux, Android  | - temps réel          |      | Attribuent les ressources
-^    |                                     | - supercalculateur    |      | Assurent la sécurité
-^    |                                     |                       |      |
-^    |                                     |                       |      |
-^    +-------------------------------------+-----------------------+      |
-^    |                                                             |      |
-^    |                       Isolement, sécurité                   |      |
-^    |                                                             |  +---+
-^    +----------------------------+--------------------------------+
-^    |                            |                                |  +---+
-^    |                            |                                |      |
-^    | Langages compilés :        | Languges interprétés :         |      |
-^    | - rapides                  | - lents                        |      |
-^    | - un seul OS à la fois     | - cross plateformes            |      | Programmes utilisateurs
-^<   | - stables                  | - évoluent rapidement          |      |
-     |                            |                                |      |
-     | C, C++, Go, Rust, Ada, ... |  Python, Java, Javascript, ... |      |
-     |                            |  ~~~~~~                        |      |
-     |                            |                                |  +---+
-     +----------------------------+--------------------------------+
+   +------------------------------+-----------------------+
+   |                              |                       |  +---+
+   |  CPU / Microcontrôleurs      | Unités specialisées : |      |
+   |  Langage :  assembleur       | - calcul flottant     |      |
+>> |  Deux familles : ARM et x86  | - GPU                 |      | Matériel
+^  |                              | - cryptographie       |      |
+^  |                              | - réseau de neurones  |  +---+
+^  +------------------------------+-----------------------+
+^     ^                                                ^
+^     ^     Programmes compilés, chargés en mémoire    ^
+^     ^                                                ^
+^  +------------------------------------------------------+
+^  |                                                      |  +---+
+^  |            Drivers, TCP/IP                           |      |
+^  |                                                      |      |
+^  +------------------------------+-----------------------+      |
+^  |                              |                       |      |
+^  |                              |                       |      | Programmes en C
+^  | OS génériques :              | OS spécialisés :      |      | Pilotent l'électronique
+^  | iOS, Windows, Linux, Android | - temps réel          |      | Attribuent les ressources
+^  |                              | - supercalculateur    |      | Assurent la sécurité
+^  |                              |                       |      |
+^  |                              |                       |      |
+^  +------------------------------+-----------------------+      |
+^  |                                                      |      |
+^  |                Isolement, sécurité                   |      |
+^  |                                                      |  +---+
+^  +------------------------+-----------------------------+
+^  |                        |                             |  +---+
+^  | Langages compilés :    | Languges interprétés :      |      |
+^  | - rapides              | - lents                     |      |
+^  | - un seul OS à la fois | - cross plateformes         |      | Programmes
+^< | - stables              | - évoluent rapidement       |      |  utilisateurs
+   |                        |                             |      |
+   | C, C++, Go, Rust, Ada  | Python, Java, Javascript..  |      |
+   |                        | ~~~~~~~                     |  +---+
+   +------------------------+-----------------------------+
 ```
 
 Note:
@@ -424,8 +418,6 @@ Ce "plus petit élément" est miniaturisé, optimisé, et standardisé encore et
 Améliorations de notre robot :
 - simplicité d'utilisation
 - réduction du coût
-
-<br/>
 
 <img src="/assets/raspberry.jpg" width="400px">
 <img src="/assets/niryo.jpeg" width="500px">
@@ -506,21 +498,19 @@ Permet d'avoir Netfix sans pannes
 2001 :
 
 > Linux is a cancer that attaches itself in an intellectual property sense to everything it touches
->
 > Steve Ballmer - Microsoft CEO
 
 
 2016 :
 
-Microsoft devient un des 15 membres Platinium de la linux fondation (> 500 k$ an).
+Microsoft membres Platinium de la linux fondation (> 500 k$ an)
 
 <br/>
 
 L'open source est une ressource stratégique :
-- contrôler
-- exploiter
+- contrôler + exploiter
 
-Mais tout le monde en bénéficie, petits & grands, publiques & privés.
+Bénéficie à tout le monde, petits & grands, publiques & privés.
 
 Note:
 Pose des questions économique : sort du PIB
@@ -558,8 +548,6 @@ Finalement le programme que l'on écrit n'est qu'une "glu" de librairies open so
 
 ### Compilé versus interprété
 
-<br/>
-
 #### C
 ```c
 // File hello.c
@@ -575,8 +563,6 @@ $ gcc -o hello hello.c
 $ ./hello
 Hello, World!
 ```
-
-<br/>
 
 #### Python
 
@@ -635,20 +621,18 @@ Les réseaux sont à la fois une faiblesse pour la sécurité (hacking) et un av
 ### Langages
 
 - Assembleur &emsp;&#8592;
-- C &emsp;&#8592;
+- C & C++ &emsp;&#8592;
 - COBOL
-- C++
 - Perl
 - PHP
-- Ruby
+- VBA &emsp;&#8592;
 - Java &emsp;&#8592;
 - Javascript - html - css &emsp;&#8592;
-- Go
 - Rust
 - Swift &emsp;&#8592;
-- Kotlin
-- Python version 2.7
-- Python version 3 &emsp;&#8592;
+- Python v2.7
+- Python v3 &emsp;&#8592;
+- Go, Rust, Kotlin
 
 ---
 
@@ -662,10 +646,11 @@ Les réseaux sont à la fois une faiblesse pour la sécurité (hacking) et un av
 
 - **Java** - multitâche, Android
 
+- **Swift** - iOS (Apple)
+
 - **Javascript - html - css** - internet
 
-- **Swift** - iOS
-
+- **VBA** - excel
 
 ---
 
@@ -683,19 +668,37 @@ Les réseaux sont à la fois une faiblesse pour la sécurité (hacking) et un av
 
 ---
 
+## https://h--o-l.github.io/niryo/
+
+---
+
 # Python
 
+1. Les commentaires
+
 1. Les variables
-
-1. Les fonctions
-
-1. Les try-catch (ou try-except)
 
 1. Les conditions
 
 1. Les boucles
 
+1. Les fonctions
+
+1. Les try-catch (ou try-except)
+
 1. Les classes (programmation objet)
+
+---
+
+## Les commentaires
+
+```py
+....
+
+# Un commentaire
+
+...
+```
 
 ---
 
@@ -703,23 +706,24 @@ Les réseaux sont à la fois une faiblesse pour la sécurité (hacking) et un av
 
 
 ```py
-# Un commentaire
 a = 2
-type(a) # ⇨ <class 'int'>
+type(a)
+# ⇨ <class 'int'> ⇨ un entier
 
-une_variable = "coucou !"
-type(une_variable) # ⇨ <class 'str'>
+c = 3.14
+type(c)
+# ⇨ <class 'float'> ⇨ un réel
 
-une_autre_variable = 3.14
-type(une_autre_variable) # ⇨ <class 'float'>
+b = "coucou !"
+type(b)
+# ⇨ <class 'str'> ⇨ une chaine de caractères
 
-a = a + 7 # ⇨ 9
+a = a + 7 # ⇨ a contient maintenant la valeur 9
 
-a = a + une_variable # ⇨ Exception : TypeError:
-                     # unsupported operand type(s) for +: 'int' and 'str'
+a = a + b # ⇨ Exception : TypeError:
+          #               unsupported operand type(s) for +: 'int' and 'str'
 
-a = a + une_autre_variable # ⇨ 5.14
-type(a) # ⇨ <class 'float'>
+une_variableAvecUnNom_BIZARRE = "toto"
 
 ```
 
@@ -728,18 +732,72 @@ Typage fort et dynamique et implicite.
 
 ---
 
+## Les conditions
+
+```py
+a = 56
+if a == 56:
+    print("c'est vrai")
+
+if a > 10:
+    print("c'est vrai")
+elif a > 40:
+    print("c'est vrai mais on ne passera pas ici")
+else:
+    print("on ne passera pas ici")
+
+
+if a == 56 and True:
+    print("c'est vrai")
+
+if a == 56 or False:
+    print("c'est vrai")
+```
+
+---
+
+## Les boucles
+
+```py
+i = 0
+while i < 10:
+    print(i) # ⇨ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    i = i + 1
+
+
+for i in range(10):
+    print(i) # ⇨ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+
+
+tableau = ['abcd', 'toto', 42, 90, '90']
+for i in tableau:
+    print(i) # ⇨ abcd, toto, 42, 90, 90
+
+
+string = 'hello'
+for letter in string:
+    print(letter) # ⇨ h, e, l, l, o
+```
+
+---
+
 ## Les fonctions
 ```py
-print("coucou") # ⇨ coucou
-type("coucou") # ⇨ <class 'str'>
+print("coucou") # ⇨ c'est la fonction print
+type("coucou") # ⇨ c'est la fonction type
 
-def une_fonction(a, b, c_as_a_default_value = 12):
-    return (a + b) / c_as_a_default_value
+def une_fonction(a, b, c = 12):
+    # Ici on peut mettre plein de code
+    variable_intermediaire = (a + b) / c
+
+    # on retourne un résultat
+    return variable_intermediaire
+
 
 a = une_fonction(6, 18) # ⇨ 2.0
 b = une_fonction(2, 6, 2) # ⇨ 4.0
 
-print(a - b) # => - 2.0
+print(a - b) # ⇨ - 2.0
 ```
 
 ---
@@ -757,48 +815,6 @@ try:
 except ZeroDivisionError as a:
     print("on passe ici")
     print(a)
-```
-
----
-
-## Les conditions
-
-```py
-a = 56
-if a > 10:
-    print("c'est vrai")
-else:
-    print("on ne passera pas ici")
-
-if True and a:
-    print("c'est vrai")
-
-if False or 0 or None:
-    print("c'est faux")
-
-if a is None:
-    print("première condition vérifiée")
-elif a < 10:
-    print("première condition fausse mais deuxième ok")
-```
-
----
-
-## Les boucles
-
-```py
-i = 0
-while i < 10:
-    print((i + 1) * 4) # ⇨ 8, 12, 16, 20, 24, 28, 32, 36, 40
-    i = i + 1
-
-list = ['h', 'e', 'l', 'l', 'o']
-for letter in list:
-    print(letter) # ⇨ h, e, l, l, o
-
-str = 'hello'
-for letter in str:
-    print(letter) # ⇨ h, e, l, l, o
 ```
 
 ---
