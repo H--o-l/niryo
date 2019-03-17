@@ -1,7 +1,12 @@
+## TD
 
-## CodinGame
+### Snakify
 
-### Site URL
+<https://snakify.org/en/lessons/print_input_numbers/>
+
+Créer un compte en haut à droite, cocher "j'ai un enseignant" => **hoel.iris@gmail.com**
+
+### CodinGame
 
 <https://www.codingame.com/training/easy>
 
