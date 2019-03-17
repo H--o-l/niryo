@@ -21,7 +21,7 @@ app.logger.setLevel(logging.INFO)
 niryo = None
 rospy_handler = None
 last_tool = TOOL_NONE
-supported_tools = ['3']  # Only grip 3 for now, otherwise /!\ Rospi deadlock
+supported_tools = ['1', '3']
 initial_position = {
     'x': 0.098737951452,
     'y': -0.0118353702839,
