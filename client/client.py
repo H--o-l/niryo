@@ -144,10 +144,10 @@ def gripper_toogle():
     global gripper_open
     if gripper_open:
         gripper_open = False
-        requests_post_and_print(endpoint + '/gripper/3/close')
+        requests_post_and_print(endpoint + '/gripper/1/close')
     else:
         gripper_open = True
-        requests_post_and_print(endpoint + '/gripper/3/open')
+        requests_post_and_print(endpoint + '/gripper/1/open')
 
 def number(n):
     global positions_list
