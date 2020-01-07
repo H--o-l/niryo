@@ -1,0 +1,36 @@
+---
+
+- name: Copy from disk
+  copy:
+    src: '../../../website/dist.tgz'
+    dest: '/tmp/'
+    mode: 0600
+  register: local_package_file
+
+- name: Clean previous files
+  file:
+    path: /var/www/iut
+    state: absent
+  when: local_package_file.changed
+
+- name: Create directory
+  file:
+    path: /var/www/iut
+    state: directory
+  when: local_package_file.changed
+
+- name: Install files
+  unarchive:
+    src: '{{ local_package_file.dest }}'
+    dest: /var/www/iut
+    remote_src: true
+  when: local_package_file.changed
+
+- name: Plug into nginx
+  template:
+    src: 'etc/nginx/default.d/iut.conf'
+    dest: '/etc/nginx/default.d/iut.conf'
+  become: true
+  tags: [conf]
+  notify:
+    - Reload nginx

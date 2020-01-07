@@ -1,0 +1,91 @@
+---
+
+- name: Install nginx
+  dnf:
+    name: nginx
+  become: true
+
+- name: Enable and start nginx
+  service:
+    name: nginx
+    enabled: true
+    state: started
+  become: true
+
+- name: Install certbot
+  dnf:
+    name: certbot
+  become: true
+
+- name: Test HTTPS certificate existence
+  stat:
+    path: '/etc/letsencrypt/live/{{ inventory_hostname }}/fullchain.pem'
+  become: true
+  register: certificate_file
+
+- name: Copy configuration
+  template:
+    src: etc/nginx/nginx.conf
+    dest: /etc/nginx/nginx.conf
+  become: true
+  register: conf_changed
+
+- name: Reload nginx
+  service:
+    name: nginx
+    state: reloaded
+  become: true
+  when: conf_changed.changed
+
+- name: Create /var/www/letsencrypt directory
+  file:
+    path: /var/www/letsencrypt
+    state: directory
+  become: true
+
+- name: Change /var/www ownership and group
+  file:
+    path: /var/www
+    owner: hoel.iris
+    group: hoel.iris
+    recurse: yes
+  become: true
+
+- name: Generate HTTPS certificate
+  shell: certbot certonly -n --agree-tos --debug-challenge
+         --webroot -w /var/www/letsencrypt
+         -m 'hoel.iris@gmail.com'
+         -d '{{ inventory_hostname }}'
+  become: true
+  when: not certificate_file.stat.exists
+
+- name: Test HTTPS certificate existence
+  stat:
+    path: '/etc/letsencrypt/live/{{ inventory_hostname }}/fullchain.pem'
+  become: true
+  register: certificate_file
+
+- name: Assert HTTPS certificate existence
+  assert:
+    that: certificate_file.stat.exists
+
+- name: Re-copy configuration now that the certificate exists
+  template:
+    src: etc/nginx/nginx.conf
+    dest: /etc/nginx/nginx.conf
+  become: true
+  register: conf_changed_again
+
+- name: Reload nginx
+  service:
+    name: nginx
+    state: reloaded
+  become: true
+  when: conf_changed_again.changed
+
+- name: Register HTTPS certificate renewal in crontab
+  cron:
+    name: letsencrypt_renewal
+    special_time: weekly
+    job: certbot renew --quiet && systemctl reload nginx
+  become: true

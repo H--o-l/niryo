@@ -1,0 +1,91 @@
+---
+
+# TODO remove ping from google cloud network authorisation
+
+- name: Install python3-libselinux
+  yum:
+    name: python3-libselinux
+  become: true
+
+- name: Set SELinux permissive
+  selinux:
+    policy: targeted
+    state: permissive
+  become: true
+
+- name: Install EPEL repo
+  dnf:
+    name: epel-release
+  become: true
+
+- name: Install dnf-automatic
+  dnf:
+    name: dnf-automatic
+  become: true
+
+- name: Enable dnf-automatic
+  service:
+    name: dnf-automatic
+    enabled: true
+    state: started
+  become: true
+
+- name: Set Paris timezone
+  timezone:
+    name: Europe/Paris
+  become: true
+
+- name: Set persistent journald logs
+  lineinfile:
+    path: /etc/systemd/journald.conf
+    regexp: '^#?Storage='
+    line: 'Storage=persistent'
+  become: true
+  notify:
+    - Restart systemd-journald
+
+- name: Install some nice programs
+  dnf:
+    name:
+      - zsh
+      - git
+      # - the_silver_searcher  no available on centos yet
+      - tree
+      - nano
+  become: true
+
+- name: Set zsh as default shell
+  user:
+    name: hoel.iris
+    shell: /bin/zsh
+  become: true
+
+- name: Clone oh-my-zsh repo
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh.git
+    dest: /home/hoel.iris/.oh-my-zsh
+    update: false
+
+- name: Install zsh-autosuggestions repo
+  yum_repository:
+    name: zsh-autosuggestions
+    description: zsh-autosuggestions
+    baseurl: http://download.opensuse.org/repositories/shells:/zsh-users:/zsh-autosuggestions/CentOS_8/
+    gpgcheck: 1
+    gpgkey: http://download.opensuse.org/repositories/shells:/zsh-users:/zsh-autosuggestions/CentOS_8/repodata/repomd.xml.key
+    enabled: 1
+  become: true
+
+- name: Install zsh-autosuggestions
+  dnf:
+    name: zsh-autosuggestions
+  become: true
+
+- name: copy zsh-autosuggestions
+  shell: cp -r /usr/share/zsh-autosuggestions
+         /home/hoel.iris/.oh-my-zsh/custom/plugins/.
+
+- name: Deploy .zshrc
+  template:
+    src: zshrc
+    dest: /home/hoel.iris/.zshrc

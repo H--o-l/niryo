@@ -1,0 +1,20 @@
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/.local/bin:$PATH
+
+export ZSH=/home/hoel.iris/.oh-my-zsh
+
+ZSH_THEME="robbyrussell"
+
+HYPHEN_INSENSITIVE="true"
+CASE_SENSITIVE="true"
+COMPLETION_WAITING_DOTS="true"
+
+plugins=(
+  git
+  screen
+  zsh-autosuggestions
+)
+
+source $ZSH/oh-my-zsh.sh
+
+export EDITOR=nano
