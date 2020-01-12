@@ -5,7 +5,7 @@ import keyboard
 import requests
 import json
 
-endpoint = 'http://192.168.0.21:6000'
+endpoint = 'http://10.10.10.10:6000'
 
 ctrl = False
 alt = False
