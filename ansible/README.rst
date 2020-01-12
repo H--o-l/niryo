@@ -8,4 +8,4 @@ Change IPs in ``/inventories/niryo/hosts`` file, then:
 
 .. code:: shell
 
-  ansible-playbook -i inventories/niryo/hosts deploy.yml --ask-become-pass
+  ansible-playbook -i inventories/niryo/hosts deploy.yml --ask-pass --ask-become-pass

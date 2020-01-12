@@ -17,6 +17,11 @@ Resources
 .. _Niryo Python API: https://github.com/NiryoRobotics/niryo_one_ros/tree/master/niryo_one_python_api
 
 
+Robot wifi default password: ``niryoone``.
+Robot ssh default password: ``niryo:robotics@10.10.10.10``.
+hotspot password:  ``robotics``
+
+
 Notes
 -----
 
@@ -24,7 +29,7 @@ Add Python and pip to windows 10 path in PowerShell:
 
 .. code:: powershell
 
- $env:PATH = $env:PATH + ";C:\Users\H__o_l\AppData\Local\Programs\Python\Python37-32\;C:\Users\H__o_l\AppData\Local\Programs\Python\Python37-32\Scripts\"
+ $env:PATH = $env:PATH + ";C:\Users\H__o_l\AppData\Local\Programs\Python\Python37\;C:\Users\H__o_l\AppData\Local\Programs\Python\Python37\Scripts\"
 
 
 In PowerShell, ``curl`` is in fact Windows ``Invoke-WebRequest``, usage:
