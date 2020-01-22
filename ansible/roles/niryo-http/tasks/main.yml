@@ -13,10 +13,10 @@
     name: "{{ packages }}"
   vars:
     packages:
-    - python-setuptools
-    - python-jsonschema
-    - silversearcher-ag # just for dev
-  become: yes
+      - python-setuptools
+      - python-jsonschema
+      - silversearcher-ag  # just for dev
+  become: true
 
 - name: Create niryo-http directory
   file:
@@ -31,9 +31,9 @@
     dest: '/home/niryo/niryo-http/{{ item.dest }}'
     rsync_opts:
       - "--exclude=*.pyc"
-    checksum: true # not needed but logic
+    checksum: true  # not needed but logic
   with_items:
-    - {src: niryo_http/, dest: niryo_http} # src
+    - {src: niryo_http/, dest: niryo_http}  # src
     - {src: setup.py, dest: setup.py}
   register: src
 
@@ -49,7 +49,7 @@
   template:
     src: etc/systemd/system/niryo-http.service
     dest: /etc/systemd/system/niryo-http.service
-  become: yes
+  become: true
   tags: [conf]
   notify:
     - Reload systemd files
@@ -59,7 +59,7 @@
   template:
     src: etc/systemd/system/niryo-http.timer
     dest: /etc/systemd/system/niryo-http.timer
-  become: yes
+  become: true
   tags: [conf]
   notify:
     - Reload systemd files
@@ -72,7 +72,7 @@
     name: niryo-http.timer
     state: started
     enabled: true
-  become: yes
+  become: true
 
 - name: Check niryo-http API
   uri:
