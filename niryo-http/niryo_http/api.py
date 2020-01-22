@@ -10,6 +10,16 @@ from jsonschema import validate, ValidationError
 import logging
 import signal
 
+
+# trajectory
+from std_msgs.msg import Bool
+from std_msgs.msg import Int32
+from sensor_msgs.msg import Joy
+from sensor_msgs.msg import JointState
+from trajectory_msgs.msg import JointTrajectory
+from trajectory_msgs.msg import JointTrajectoryPoint
+
+
 # Niryo API
 # from niryo_one_python_api.niryo_one_api import *
 from hacked_niryo_one_python_api import *
@@ -31,11 +41,118 @@ initial_position = {
     'yaw': 0.191800997153,
 }
 
+MAX_MULTIPLIER = 0.15
+MIN_MULTIPLIER = 0.01
+DEFAULT_MULTIPLIER = 0.07
+STEP_MULTIPLIER = 0.01
+trajectory = None
+
+class Trajectory():
+    def __init__(self):
+        print '========== traj init start'
+
+        self.timer_rate = 0.15  # rospy.get_param("~joystick_timer_rate_sec")
+        self.validation = \
+            rospy.get_param("/niryo_one/robot_command_validation")
+
+        self.axes = [0, 0, 0, 0, 0, 0, 0, 0]
+        self.buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.positions = [0, 0, 0, 0, 0, 0]
+        self.multiplier = DEFAULT_MULTIPLIER
+        self.learning_mode_on = True
+        self.current_tool_id = 0
+        self.is_tool_active = False
+
+        rospy.Subscriber('/joint_states', JointState,
+                         self._callback_joint_states)
+
+        self.joint_trajectory_publisher = \
+            rospy.Publisher(
+                '/niryo_one_follow_joint_trajectory_controller/command',
+                JointTrajectory, queue_size=10)
+
+        rospy.Timer(rospy.Duration(self.timer_rate),
+                    self._send_joint_trajectory)
+
+        print '========== traj init ok'
+
+    def set_axes(self, axes):
+        self.axes = axes
+
+    def _callback_joint_states(self, joint_states):
+        self.positions = list(joint_states.position)
+
+    def _send_joint_trajectory(self, event):
+        something_to_do = False
+        for axe in self.axes:
+            if abs(axe) > 0.1:
+                something_to_do = True
+        if not something_to_do:
+            return
+
+        positions = self.positions
+
+        multiplier = self.multiplier
+
+        positions[0] = positions[0] + self.axes[0] * multiplier
+        positions[1] = positions[1] - self.axes[1] * multiplier
+        positions[2] = positions[2] + self.axes[2] * multiplier
+        positions[3] = positions[3] - self.axes[3] * multiplier
+        positions[4] = positions[4] + self.axes[4] * multiplier
+        positions[5] = positions[5] - self.axes[5] * multiplier
+
+        # validate
+        v = self.validation['joint_limits']
+        if positions[0] < v['j1']['min']:
+            positions[0] = v['j1']['min']
+        elif positions[0] > v['j1']['max']:
+            positions[0] = v['j1']['max']
+
+        if positions[1] < v['j2']['min']:
+            positions[1] = v['j2']['min']
+        elif positions[1] > v['j2']['max']:
+            positions[1] = v['j2']['max']
+
+        if positions[2] < v['j3']['min']:
+            positions[2] = v['j3']['min']
+        elif positions[2] > v['j3']['max']:
+            positions[2] = v['j3']['max']
+
+        if positions[3] < v['j4']['min']:
+            positions[3] = v['j4']['min']
+        elif positions[3] > v['j4']['max']:
+            positions[3] = v['j4']['max']
+
+        if positions[4] < v['j5']['min']:
+            positions[4] = v['j5']['min']
+        elif positions[4] > v['j5']['max']:
+            positions[4] = v['j5']['max']
+
+        if positions[5] < v['j6']['min']:
+            positions[5] = v['j6']['min']
+        elif positions[5] > v['j6']['max']:
+            positions[5] = v['j6']['max']
+
+        # publish
+        msg = JointTrajectory()
+        msg.header.stamp = rospy.Time.now()
+        msg.joint_names = ['joint_1', 'joint_2', 'joint_3', 'joint_4',
+                           'joint_5', 'joint_6']
+
+        point = JointTrajectoryPoint()
+        point.positions = positions
+        point.time_from_start = rospy.Duration(self.timer_rate)
+        msg.points = [point]
+
+        self.joint_trajectory_publisher.publish(msg)
+        print msg
+
 class InvalidUsage(Exception):
     def __init__(self, code, message=None, body=None):
         Exception.__init__(self)
         self.code = code
         self.message = message
+
 
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
@@ -109,6 +226,7 @@ def exit_with_error():
 def start():
     try:
         global rospy_handler
+        global trajectory
         rospy_handler = RospyHandler()
         signal.signal(signal.SIGINT, stop)
         signal.signal(signal.SIGTERM, stop)
@@ -121,6 +239,9 @@ def start():
             timeout = timeout + 1
         if not rospy_handler.isAlive():
             exit_with_error()
+
+        trajectory = Trajectory()
+
         print '--- rospi init ok ---'
         app.run(host='0.0.0.0', port=6000, threaded=False, debug=False,
                 use_reloader=False)
@@ -141,6 +262,12 @@ def list_routes():
                                      if m != 'HEAD' and m != 'OPTIONS']
     routes.pop('/static/<path:filename>')
     return routes
+
+@app.route('/test', methods=['GET'])
+def get_test():
+    global trajectory
+    trajectory.set_axes([0.4, 0, 0, 0, 0, 0, 0, 0])
+    return flask.jsonify({'message': 'OK'})
 
 @app.route('/', methods=['GET'])
 def get_root():
