@@ -20,7 +20,7 @@ app.logger.setLevel(logging.INFO)
 
 niryo = None
 rospy_handler = None
-last_tool = TOOL_NONE
+last_tool = TOOL_NONE  # the small gripper
 supported_tools = ['1', '2', '3']
 initial_position = {
     'x': 0.098737951452,
@@ -447,9 +447,44 @@ def post_shift_pose_axis(axis):
 
     return 'OK'
 
+
+@app.route('/gripper', methods=['GET'])
+def get_gripper():
+    global last_tool
+    if last_tool == TOOL_GRIPPER_1_ID:
+        n = 1
+    elif last_tool == TOOL_GRIPPER_2_ID:
+        n = 2
+    elif last_tool == TOOL_GRIPPER_3_ID:
+        n = 3
+    else:
+        n = None
+    return flask.jsonify(n)
+
+@app.route('/gripper/<n>', methods=['POST'])
+def set_gripper(n):
+    global last_tool
+    if n not in supported_tools:
+        raise InvalidUsage(400, 'Unsupported tool: ' + n + '\n'
+                                'Supported tools are: ' + str(supported_tools))
+    if n == '1':
+        tool = TOOL_GRIPPER_1_ID
+    elif n == '2':
+        tool = TOOL_GRIPPER_2_ID
+    elif n == '3':
+        tool = TOOL_GRIPPER_3_ID
+    else:
+        raise InvalidUsage(400, 'Should not be here, tool not supported: ' + n)
+    last_tool = tool
+    niryo.change_tool(tool)
+    app.logger.info('Tool changed for ' + n)
+    return 'OK'
+
 @app.route('/gripper/unset', methods=['POST'])
 def unset_gripper():
+    global last_tool
     niryo.change_tool(0)
+    last_tool = TOOL_NONE
     print 'Tool unset'
     return 'OK'
 
