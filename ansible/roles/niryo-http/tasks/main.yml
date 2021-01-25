@@ -1,5 +1,9 @@
 ---
 
+# ssh sans password : ~/.ssh ‹› ➜ scp ~/.ssh/id_rsa.pub niryo@192.168.43.114:~/.ssh/authorized_keys
+# Pour sudo sans password : sudo nano /etc/sudoers "niryo ALL=(ALL:ALL) NOPASSWD:ALL"
+# for ip in niryo@192.168.43.87 niryo@192.168.43.114 niryo@192.168.43.48 niryo@192.168.43.42; do echo "=== $ip ===" && ssh $ip sudo systemctl status niryo-http | ag "Active:"; done
+
 # if issue with port access
 # https://askubuntu.com/a/224396
 
